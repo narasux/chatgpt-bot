@@ -5,12 +5,14 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+
 	"github.com/google/uuid"
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
-	"start-feishubot/initialization"
-	"start-feishubot/services"
-	"start-feishubot/services/openai"
+
+	"github.com/narasux/chatgpt-bot/initialization"
+	"github.com/narasux/chatgpt-bot/services"
+	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
 type CardKind string

@@ -1,4 +1,4 @@
-module start-feishubot
+module github.com/narasux/chatgpt-bot
 
 go 1.18
 

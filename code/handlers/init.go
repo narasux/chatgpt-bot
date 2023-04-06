@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"context"
-	"start-feishubot/initialization"
-	"start-feishubot/services/openai"
 
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
+
+	"github.com/narasux/chatgpt-bot/initialization"
+	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
 type MessageHandlerInterface interface {

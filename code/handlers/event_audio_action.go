@@ -3,10 +3,12 @@ package handlers
 import (
 	"context"
 	"fmt"
-	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"os"
-	"start-feishubot/initialization"
-	"start-feishubot/utils/audio"
+
+	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
+
+	"github.com/narasux/chatgpt-bot/initialization"
+	"github.com/narasux/chatgpt-bot/utils/audio"
 )
 
 type AudioAction struct { /*语音*/

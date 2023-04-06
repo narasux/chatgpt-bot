@@ -9,10 +9,11 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
-	"start-feishubot/initialization"
-	"start-feishubot/services/loadbalancer"
 	"strings"
 	"time"
+
+	"github.com/narasux/chatgpt-bot/initialization"
+	"github.com/narasux/chatgpt-bot/services/loadbalancer"
 )
 
 type ChatGPT struct {

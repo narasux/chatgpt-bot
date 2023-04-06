@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"context"
+
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
-	"start-feishubot/initialization"
-	"start-feishubot/services"
-	"start-feishubot/services/openai"
+
+	"github.com/narasux/chatgpt-bot/initialization"
+	"github.com/narasux/chatgpt-bot/services"
+	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
 func NewRoleTagCardHandler(cardMsg CardMsg,

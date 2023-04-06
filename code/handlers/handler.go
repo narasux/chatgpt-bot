@@ -3,14 +3,14 @@ package handlers
 import (
 	"context"
 	"fmt"
-	"start-feishubot/initialization"
-	"start-feishubot/services"
-	"start-feishubot/services/openai"
 	"strings"
 
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
-
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
+
+	"github.com/narasux/chatgpt-bot/initialization"
+	"github.com/narasux/chatgpt-bot/services"
+	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
 // 责任链

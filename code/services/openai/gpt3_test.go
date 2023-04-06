@@ -2,8 +2,9 @@ package openai
 
 import (
 	"fmt"
-	"start-feishubot/initialization"
 	"testing"
+
+	"github.com/narasux/chatgpt-bot/initialization"
 )
 
 func TestCompletions(t *testing.T) {

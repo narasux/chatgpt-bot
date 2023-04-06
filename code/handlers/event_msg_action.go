@@ -2,7 +2,8 @@ package handlers
 
 import (
 	"fmt"
-	"start-feishubot/services/openai"
+
+	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
 type MessageAction struct { /*消息*/

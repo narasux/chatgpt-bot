@@ -2,20 +2,18 @@ package main
 
 import (
 	"context"
-	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"log"
-	"start-feishubot/handlers"
-	"start-feishubot/initialization"
-	"start-feishubot/services/openai"
-
-	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
 
 	"github.com/gin-gonic/gin"
+	sdkginext "github.com/larksuite/oapi-sdk-gin"
+	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
+	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"github.com/spf13/pflag"
 
-	sdkginext "github.com/larksuite/oapi-sdk-gin"
-
 	"github.com/larksuite/oapi-sdk-go/v3/event/dispatcher"
+	"github.com/narasux/chatgpt-bot/handlers"
+	"github.com/narasux/chatgpt-bot/initialization"
+	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
 var (

@@ -2,10 +2,11 @@ package services
 
 import (
 	"encoding/json"
-	"start-feishubot/services/openai"
 	"time"
 
 	"github.com/patrickmn/go-cache"
+
+	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
 type SessionMode string
