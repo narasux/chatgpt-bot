@@ -30,8 +30,9 @@ type MessageHandler struct {
 	config       initialization.Config
 }
 
-func (m MessageHandler) cardHandler(ctx context.Context,
-	cardAction *larkcard.CardAction) (interface{}, error) {
+func (m MessageHandler) cardHandler(
+	ctx context.Context, cardAction *larkcard.CardAction,
+) (interface{}, error) {
 	messageHandler := NewCardHandler(m)
 	return messageHandler(ctx, cardAction)
 }
@@ -45,7 +46,6 @@ func judgeMsgType(event *larkim.P2MessageReceiveV1) (string, error) {
 	default:
 		return "", fmt.Errorf("unknown message type: %v", *msgType)
 	}
-
 }
 
 func (m MessageHandler) msgReceivedHandler(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
@@ -54,7 +54,6 @@ func (m MessageHandler) msgReceivedHandler(ctx context.Context, event *larkim.P2
 		fmt.Println("unknown chat type")
 		return nil
 	}
-	//fmt.Println(larkcore.Prettify(event.Event.Message))
 
 	msgType, err := judgeMsgType(event)
 	if err != nil {
@@ -89,17 +88,17 @@ func (m MessageHandler) msgReceivedHandler(ctx context.Context, event *larkim.P2
 		info:    &msgInfo,
 	}
 	actions := []Action{
-		&ProcessedUniqueAction{}, //避免重复处理
-		&ProcessMentionAction{},  //判断机器人是否应该被调用
-		&AudioAction{},           //语音处理
-		&EmptyAction{},           //空消息处理
-		&ClearAction{},           //清除消息处理
-		&PicAction{},             //图片处理
-		&RoleListAction{},        //角色列表处理
-		&HelpAction{},            //帮助处理
-		&BalanceAction{},         //余额处理
-		&RolePlayAction{},        //角色扮演处理
-		&MessageAction{},         //消息处理
+		&ProcessedUniqueAction{}, // 避免重复处理
+		&ProcessMentionAction{},  // 判断机器人是否应该被调用
+		&AudioAction{},           // 语音处理
+		&EmptyAction{},           // 空消息处理
+		&ClearAction{},           // 清除消息处理
+		&PicAction{},             // 图片处理
+		&RoleListAction{},        // 角色列表处理
+		&HelpAction{},            // 帮助处理
+		&BalanceAction{},         // 余额处理
+		&RolePlayAction{},        // 角色扮演处理
+		&MessageAction{},         // 消息处理
 
 	}
 	chain(data, actions...)
@@ -108,8 +107,7 @@ func (m MessageHandler) msgReceivedHandler(ctx context.Context, event *larkim.P2
 
 var _ MessageHandlerInterface = (*MessageHandler)(nil)
 
-func NewMessageHandler(gpt *openai.ChatGPT,
-	config initialization.Config) MessageHandlerInterface {
+func NewMessageHandler(gpt *openai.ChatGPT, config initialization.Config) MessageHandlerInterface {
 	return &MessageHandler{
 		sessionCache: services.GetSessionCache(),
 		msgCache:     services.GetMsgCache(),
@@ -118,8 +116,7 @@ func NewMessageHandler(gpt *openai.ChatGPT,
 	}
 }
 
-func (m MessageHandler) judgeIfMentionMe(mention []*larkim.
-	MentionEvent) bool {
+func (m MessageHandler) judgeIfMentionMe(mention []*larkim.MentionEvent) bool {
 	if len(mention) != 1 {
 		return false
 	}

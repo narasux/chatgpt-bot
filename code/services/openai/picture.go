@@ -43,7 +43,6 @@ func (gpt ChatGPT) GenerateImage(prompt string, size string, n int) ([]string, e
 	imageResponseBody := &ImageResponseBody{}
 	err := gpt.sendRequestWithBodyType(gpt.ApiUrl+"/v1/images/generations",
 		"POST", jsonBody, requestBody, imageResponseBody)
-
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +77,6 @@ func (gpt ChatGPT) GenerateImageVariation(images string, size string, n int) ([]
 	imageResponseBody := &ImageResponseBody{}
 	err := gpt.sendRequestWithBodyType(gpt.ApiUrl+"/v1/images/variations",
 		"POST", formPictureDataBody, requestBody, imageResponseBody)
-
 	if err != nil {
 		return nil, err
 	}
@@ -98,9 +96,7 @@ func (gpt ChatGPT) GenerateOneImageVariation(images string, size string) (string
 	return b64s[0], nil
 }
 
-func pictureMultipartForm(request ImageVariantRequestBody,
-	w *multipart.Writer) error {
-
+func pictureMultipartForm(request ImageVariantRequestBody, w *multipart.Writer) error {
 	f, err := os.Open(request.Image)
 	if err != nil {
 		return fmt.Errorf("opening audio file: %w", err)
@@ -127,19 +123,6 @@ func pictureMultipartForm(request ImageVariantRequestBody,
 	if err != nil {
 		return fmt.Errorf("writing response_format: %w", err)
 	}
-
-	//err = w.WriteField("user", "user123456")
-
-	//fw, err = w.CreateFormField("model")
-	//if err != nil {
-	//	return fmt.Errorf("creating form field: %w", err)
-	//}
-	//modelName := bytes.NewReader([]byte(request.Model))
-	//if _, err = io.Copy(fw, modelName); err != nil {
-	//	return fmt.Errorf("writing model name: %w", err)
-	//}
-
-	//fmt.Printf("w.FormDataContentType(): %s ", w.FormDataContentType())
 
 	w.Close()
 

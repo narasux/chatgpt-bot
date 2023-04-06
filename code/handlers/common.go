@@ -10,14 +10,14 @@ import (
 
 // func sendCard
 func msgFilter(msg string) string {
-	//replace @到下一个非空的字段 为 ''
+	// replace @到下一个非空的字段 为 ''
 	regex := regexp.MustCompile(`@[^ ]*`)
 	return regex.ReplaceAllString(msg, "")
-
 }
+
 func parseContent(content string) string {
-	//"{\"text\":\"@_user_1  hahaha\"}",
-	//only get text content hahaha
+	//"{\"text\":\"@_user_1  xxx\"}",
+	// only get text content xxx
 	var contentMap map[string]interface{}
 	err := json.Unmarshal([]byte(content), &contentMap)
 	if err != nil {
@@ -29,6 +29,7 @@ func parseContent(content string) string {
 	text := contentMap["text"].(string)
 	return msgFilter(text)
 }
+
 func processMessage(msg interface{}) (string, error) {
 	msg = strings.TrimSpace(msg.(string))
 	msgB, err := json.Marshal(msg)

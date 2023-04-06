@@ -15,8 +15,10 @@ import (
 	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
-type CardKind string
-type CardChatType string
+type (
+	CardKind     string
+	CardChatType string
+)
 
 var (
 	ClearCardKind      = CardKind("clear")            // 清空上下文
@@ -59,7 +61,6 @@ func replyCard(ctx context.Context,
 			Content(cardContent).
 			Build()).
 		Build())
-
 	// 处理错误
 	if err != nil {
 		fmt.Println(err)
@@ -76,8 +77,8 @@ func replyCard(ctx context.Context,
 
 func newSendCard(
 	header *larkcard.MessageCardHeader,
-	elements ...larkcard.MessageCardElement) (string,
-	error) {
+	elements ...larkcard.MessageCardElement,
+) (string, error) {
 	config := larkcard.NewMessageCardConfig().
 		WideScreenMode(false).
 		EnableForward(true).
@@ -98,9 +99,7 @@ func newSendCard(
 	return cardContent, err
 }
 
-func newSimpleSendCard(
-	elements ...larkcard.MessageCardElement) (string,
-	error) {
+func newSimpleSendCard(elements ...larkcard.MessageCardElement) (string, error) {
 	config := larkcard.NewMessageCardConfig().
 		WideScreenMode(false).
 		EnableForward(true).
@@ -201,8 +200,7 @@ func withImageDiv(imageKey string) larkcard.MessageCardElement {
 }
 
 // withMdAndExtraBtn 用于生成带有额外按钮的消息体
-func withMdAndExtraBtn(msg string, btn *larkcard.
-	MessageCardEmbedButton) larkcard.MessageCardElement {
+func withMdAndExtraBtn(msg string, btn *larkcard.MessageCardEmbedButton) larkcard.MessageCardElement {
 	msg, i := processMessage(msg)
 	msg = processNewLine(msg)
 	if i != nil {
@@ -216,7 +214,8 @@ func withMdAndExtraBtn(msg string, btn *larkcard.
 						Content(msg).
 						Build()).
 					IsShort(true).
-					Build()}).
+					Build(),
+			}).
 		Extra(btn).
 		Build()
 	return mainElement
@@ -321,8 +320,7 @@ func withOneBtn(btn *larkcard.MessageCardEmbedButton) larkcard.
 	return actions
 }
 
-//新建对话按钮
-
+// 新建对话按钮
 func withPicResolutionBtn(sessionID *string) larkcard.
 	MessageCardElement {
 	cancelMenu := newMenu("默认分辨率",
@@ -352,6 +350,7 @@ func withPicResolutionBtn(sessionID *string) larkcard.
 		Build()
 	return actions
 }
+
 func withRoleTagsBtn(sessionID *string, tags ...string) larkcard.
 	MessageCardElement {
 	var menuOptions []MenuOption
@@ -424,7 +423,6 @@ func replyMsg(ctx context.Context, msg string, msgId *string) error {
 			Content(content).
 			Build()).
 		Build())
-
 	// 处理错误
 	if err != nil {
 		fmt.Println(err)
@@ -453,7 +451,6 @@ func uploadImage(base64Str string) (*string, error) {
 				Image(bytes.NewReader(imageBytes)).
 				Build()).
 			Build())
-
 	// 处理错误
 	if err != nil {
 		fmt.Println(err)
@@ -467,10 +464,8 @@ func uploadImage(base64Str string) (*string, error) {
 	}
 	return resp.Data.ImageKey, nil
 }
-func replyImage(ctx context.Context, ImageKey *string,
-	msgId *string) error {
-	//fmt.Println("sendMsg", ImageKey, msgId)
 
+func replyImage(ctx context.Context, ImageKey *string, msgId *string) error {
 	msgImage := larkim.MessageImage{ImageKey: *ImageKey}
 	content, err := msgImage.String()
 	if err != nil {
@@ -487,7 +482,6 @@ func replyImage(ctx context.Context, ImageKey *string,
 			Content(content).
 			Build()).
 		Build())
-
 	// 处理错误
 	if err != nil {
 		fmt.Println(err)
@@ -500,18 +494,20 @@ func replyImage(ctx context.Context, ImageKey *string,
 		return err
 	}
 	return nil
-
 }
 
-func replayImageCardByBase64(ctx context.Context, base64Str string,
-	msgId *string, sessionId *string, question string) error {
+func replayImageCardByBase64(
+	ctx context.Context,
+	base64Str string,
+	msgId *string,
+	sessionId *string,
+	question string,
+) error {
 	imageKey, err := uploadImage(base64Str)
 	if err != nil {
 		return err
 	}
-	//example := "img_v2_041b28e3-5680-48c2-9af2-497ace79333g"
-	//imageKey := &example
-	//fmt.Println("imageKey", *imageKey)
+
 	err = sendImageCard(ctx, *imageKey, msgId, sessionId, question)
 	if err != nil {
 		return err
@@ -519,15 +515,14 @@ func replayImageCardByBase64(ctx context.Context, base64Str string,
 	return nil
 }
 
-func replayImagePlainByBase64(ctx context.Context, base64Str string,
-	msgId *string) error {
+func replayImagePlainByBase64(
+	ctx context.Context, base64Str string, msgId *string,
+) error {
 	imageKey, err := uploadImage(base64Str)
 	if err != nil {
 		return err
 	}
-	//example := "img_v2_041b28e3-5680-48c2-9af2-497ace79333g"
-	//imageKey := &example
-	//fmt.Println("imageKey", *imageKey)
+
 	err = replyImage(ctx, imageKey, msgId)
 	if err != nil {
 		return err
@@ -535,15 +530,14 @@ func replayImagePlainByBase64(ctx context.Context, base64Str string,
 	return nil
 }
 
-func replayVariantImageByBase64(ctx context.Context, base64Str string,
-	msgId *string, sessionId *string) error {
+func replayVariantImageByBase64(
+	ctx context.Context, base64Str string, msgId *string, sessionId *string,
+) error {
 	imageKey, err := uploadImage(base64Str)
 	if err != nil {
 		return err
 	}
-	//example := "img_v2_041b28e3-5680-48c2-9af2-497ace79333g"
-	//imageKey := &example
-	//fmt.Println("imageKey", *imageKey)
+
 	err = sendVarImageCard(ctx, *imageKey, msgId, sessionId)
 	if err != nil {
 		return err
@@ -552,7 +546,6 @@ func replayVariantImageByBase64(ctx context.Context, base64Str string,
 }
 
 func sendMsg(ctx context.Context, msg string, chatId *string) error {
-	//fmt.Println("sendMsg", msg, chatId)
 	msg, i := processMessage(msg)
 	if i != nil {
 		return i
@@ -562,8 +555,6 @@ func sendMsg(ctx context.Context, msg string, chatId *string) error {
 		Text(msg).
 		Build()
 
-	//fmt.Println("content", content)
-
 	resp, err := client.Im.Message.Create(ctx, larkim.NewCreateMessageReqBuilder().
 		ReceiveIdType(larkim.ReceiveIdTypeChatId).
 		Body(larkim.NewCreateMessageReqBodyBuilder().
@@ -572,7 +563,6 @@ func sendMsg(ctx context.Context, msg string, chatId *string) error {
 			Content(content).
 			Build()).
 		Build())
-
 	// 处理错误
 	if err != nil {
 		fmt.Println(err)
@@ -586,8 +576,10 @@ func sendMsg(ctx context.Context, msg string, chatId *string) error {
 	}
 	return nil
 }
-func sendClearCacheCheckCard(ctx context.Context,
-	sessionId *string, msgId *string) {
+
+func sendClearCacheCheckCard(
+	ctx context.Context, sessionId *string, msgId *string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🆑 机器人提醒", larkcard.TemplateBlue),
 		withMainMd("您确定要清除对话上下文吗？"),
@@ -596,8 +588,9 @@ func sendClearCacheCheckCard(ctx context.Context,
 	replyCard(ctx, msgId, newCard)
 }
 
-func sendSystemInstructionCard(ctx context.Context,
-	sessionId *string, msgId *string, content string) {
+func sendSystemInstructionCard(
+	ctx context.Context, sessionId *string, msgId *string, content string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🥷  已进入角色扮演模式", larkcard.TemplateIndigo),
 		withMainText(content),
@@ -605,8 +598,9 @@ func sendSystemInstructionCard(ctx context.Context,
 	replyCard(ctx, msgId, newCard)
 }
 
-func sendPicCreateInstructionCard(ctx context.Context,
-	sessionId *string, msgId *string) {
+func sendPicCreateInstructionCard(
+	ctx context.Context, sessionId *string, msgId *string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🖼️ 已进入图片创作模式", larkcard.TemplateBlue),
 		withPicResolutionBtn(sessionId),
@@ -614,8 +608,9 @@ func sendPicCreateInstructionCard(ctx context.Context,
 	replyCard(ctx, msgId, newCard)
 }
 
-func sendPicModeCheckCard(ctx context.Context,
-	sessionId *string, msgId *string) {
+func sendPicModeCheckCard(
+	ctx context.Context, sessionId *string, msgId *string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🖼️ 机器人提醒", larkcard.TemplateBlue),
 		withMainMd("收到图片，是否进入图片创作模式？"),
@@ -624,8 +619,9 @@ func sendPicModeCheckCard(ctx context.Context,
 	replyCard(ctx, msgId, newCard)
 }
 
-func sendNewTopicCard(ctx context.Context,
-	sessionId *string, msgId *string, content string) {
+func sendNewTopicCard(
+	ctx context.Context, sessionId *string, msgId *string, content string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("👻️ 已开启新的话题", larkcard.TemplateBlue),
 		withMainText(content),
@@ -633,8 +629,9 @@ func sendNewTopicCard(ctx context.Context,
 	replyCard(ctx, msgId, newCard)
 }
 
-func sendHelpCard(ctx context.Context,
-	sessionId *string, msgId *string) {
+func sendHelpCard(
+	ctx context.Context, sessionId *string, msgId *string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🎒需要帮助吗？", larkcard.TemplateBlue),
 		withMainMd("**我是小飞机，一款基于chatGpt技术的智能聊天机器人！**"),
@@ -669,12 +666,13 @@ func sendHelpCard(ctx context.Context,
 	replyCard(ctx, msgId, newCard)
 }
 
-func sendImageCard(ctx context.Context, imageKey string,
-	msgId *string, sessionId *string, question string) error {
+func sendImageCard(
+	ctx context.Context, imageKey string, msgId *string, sessionId *string, question string,
+) error {
 	newCard, _ := newSimpleSendCard(
 		withImageDiv(imageKey),
 		withSplitLine(),
-		//再来一张
+		// 再来一张
 		withOneBtn(newBtn("再来一张", map[string]interface{}{
 			"value":     question,
 			"kind":      PicTextMoreKind,
@@ -687,12 +685,13 @@ func sendImageCard(ctx context.Context, imageKey string,
 	return nil
 }
 
-func sendVarImageCard(ctx context.Context, imageKey string,
-	msgId *string, sessionId *string) error {
+func sendVarImageCard(
+	ctx context.Context, imageKey string, msgId *string, sessionId *string,
+) error {
 	newCard, _ := newSimpleSendCard(
 		withImageDiv(imageKey),
 		withSplitLine(),
-		//再来一张
+		// 再来一张
 		withOneBtn(newBtn("再来一张", map[string]interface{}{
 			"value":     imageKey,
 			"kind":      PicVarMoreKind,
@@ -705,8 +704,9 @@ func sendVarImageCard(ctx context.Context, imageKey string,
 	return nil
 }
 
-func sendBalanceCard(ctx context.Context, msgId *string,
-	balance openai.BalanceResponse) {
+func sendBalanceCard(
+	ctx context.Context, msgId *string, balance openai.BalanceResponse,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🎰️ 余额查询", larkcard.TemplateBlue),
 		withMainMd(fmt.Sprintf("总额度: %.2f$", balance.TotalGranted)),
@@ -720,8 +720,9 @@ func sendBalanceCard(ctx context.Context, msgId *string,
 	replyCard(ctx, msgId, newCard)
 }
 
-func SendRoleTagsCard(ctx context.Context,
-	sessionId *string, msgId *string, roleTags []string) {
+func SendRoleTagsCard(
+	ctx context.Context, sessionId *string, msgId *string, roleTags []string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🛖 请选择角色类别", larkcard.TemplateIndigo),
 		withRoleTagsBtn(sessionId, roleTags...),
@@ -729,8 +730,9 @@ func SendRoleTagsCard(ctx context.Context,
 	replyCard(ctx, msgId, newCard)
 }
 
-func SendRoleListCard(ctx context.Context,
-	sessionId *string, msgId *string, roleTag string, roleList []string) {
+func SendRoleListCard(
+	ctx context.Context, sessionId *string, msgId *string, roleTag string, roleList []string,
+) {
 	newCard, _ := newSendCard(
 		withHeader("🛖 角色列表"+" - "+roleTag, larkcard.TemplateIndigo),
 		withRoleBtn(sessionId, roleList...),

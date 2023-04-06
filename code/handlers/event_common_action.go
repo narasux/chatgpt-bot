@@ -32,7 +32,7 @@ type Action interface {
 	Execute(a *ActionInfo) bool
 }
 
-type ProcessedUniqueAction struct { //消息唯一性
+type ProcessedUniqueAction struct { // 消息唯一性
 }
 
 func (*ProcessedUniqueAction) Execute(a *ActionInfo) bool {
@@ -43,7 +43,7 @@ func (*ProcessedUniqueAction) Execute(a *ActionInfo) bool {
 	return true
 }
 
-type ProcessMentionAction struct { //是否机器人应该处理
+type ProcessMentionAction struct { // 是否机器人应该处理
 }
 
 func (*ProcessMentionAction) Execute(a *ActionInfo) bool {
@@ -138,15 +138,7 @@ type RoleListAction struct { /*角色列表*/
 }
 
 func (*RoleListAction) Execute(a *ActionInfo) bool {
-	if _, foundSystem := utils.EitherTrimEqual(a.info.qParsed,
-		"/roles", "角色列表"); foundSystem {
-		//a.handler.sessionCache.Clear(*a.info.sessionId)
-		//systemMsg := append([]openai.Messages{}, openai.Messages{
-		//	Role: "system", Content: system,
-		//})
-		//a.handler.sessionCache.SetMsg(*a.info.sessionId, systemMsg)
-		//sendSystemInstructionCard(*a.ctx, a.info.sessionId,
-		//	a.info.msgId, system)
+	if _, ok := utils.EitherTrimEqual(a.info.qParsed, "/roles", "角色列表"); ok {
 		tags := initialization.GetAllUniqueTags()
 		SendRoleTagsCard(*a.ctx, a.info.sessionId, a.info.msgId, *tags)
 		return false

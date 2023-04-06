@@ -16,9 +16,7 @@ import (
 	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
-var (
-	cfg = pflag.StringP("config", "c", "./config.yaml", "apiserver config file path.")
-)
+var cfg = pflag.StringP("config", "c", "./config.yaml", "apiserver config file path.")
 
 func main() {
 	initialization.InitRoleList()
@@ -55,5 +53,4 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to start server: %v", err)
 	}
-
 }

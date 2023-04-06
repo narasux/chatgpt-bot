@@ -22,6 +22,11 @@ GOLINES ?= $(LOCALBIN)/golines
 GOFUMPT ?= $(LOCALBIN)/gofumpt
 GOCILINT ?= $(LOCALBIN)/golangci-lint
 
+.PHONY: help
+help: ## 展示可用 make 命令及说明
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+
 ##@ 开发常用命令
 
 .PHONY: build

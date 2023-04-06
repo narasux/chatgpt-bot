@@ -35,6 +35,7 @@ func InitRoleList() *[]Role {
 func GetRoleList() *[]Role {
 	return RoleList
 }
+
 func GetAllUniqueTags() *[]string {
 	tags := make([]string, 0)
 	for _, role := range *RoleList {
@@ -55,7 +56,6 @@ func GetRoleByTitle(title string) *Role {
 
 func GetTitleListByTag(tags string) *[]string {
 	roles := make([]string, 0)
-	//pp.Println(RoleList)
 	for _, role := range *RoleList {
 		for _, roleTag := range role.Tags {
 			if roleTag == tags && !validator.IsEmptyString(role.

@@ -42,6 +42,7 @@ func startHTTPServer(config Config, r *gin.Engine) (err error) {
 	}
 	return nil
 }
+
 func startHTTPSServer(config Config, r *gin.Engine) (err error) {
 	cert, err := loadCertificate(config)
 	if err != nil {
@@ -61,6 +62,7 @@ func startHTTPSServer(config Config, r *gin.Engine) (err error) {
 	}
 	return nil
 }
+
 func StartServer(config Config, r *gin.Engine) (err error) {
 	if config.UseHttps {
 		err = startHTTPSServer(config, r)

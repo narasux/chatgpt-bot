@@ -11,7 +11,7 @@ import (
 	"github.com/narasux/chatgpt-bot/utils/audio"
 )
 
-type AudioAction struct { /*语音*/
+type AudioAction struct {
 }
 
 func (*AudioAction) Execute(a *ActionInfo) bool {
@@ -20,16 +20,13 @@ func (*AudioAction) Execute(a *ActionInfo) bool {
 		return true
 	}
 
-	//判断是否是语音
+	// 判断是否是语音
 	if a.info.msgType == "audio" {
 		fileKey := a.info.fileKey
-		//fmt.Printf("fileKey: %s \n", fileKey)
 		msgId := a.info.msgId
-		//fmt.Println("msgId: ", *msgId)
 		req := larkim.NewGetMessageResourceReqBuilder().MessageId(
 			*msgId).FileKey(fileKey).Type("file").Build()
 		resp, err := initialization.GetLarkClient().Im.MessageResource.Get(context.Background(), req)
-		//fmt.Println(resp, err)
 		if err != nil {
 			fmt.Println(err)
 			return true
@@ -38,12 +35,10 @@ func (*AudioAction) Execute(a *ActionInfo) bool {
 		resp.WriteFile(f)
 		defer os.Remove(f)
 
-		//fmt.Println("f: ", f)
 		output := fmt.Sprintf("%s.mp3", fileKey)
 		// 等待转换完成
 		audio.OggToWavByPath(f, output)
 		defer os.Remove(output)
-		//fmt.Println("output: ", output)
 
 		text, err := a.handler.gpt.AudioToText(output)
 		if err != nil {
@@ -54,11 +49,9 @@ func (*AudioAction) Execute(a *ActionInfo) bool {
 		}
 
 		replyMsg(*a.ctx, fmt.Sprintf("🤖️：%s", text), a.info.msgId)
-		//fmt.Println("text: ", text)
 		a.info.qParsed = text
 		return true
 	}
 
 	return true
-
 }

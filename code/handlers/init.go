@@ -35,14 +35,12 @@ func Handler(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 
 func ReadHandler(ctx context.Context, event *larkim.P2MessageReadV1) error {
 	_ = event.Event.Reader.ReaderId.OpenId
-	//fmt.Printf("msg is read by : %v \n", *readerId)
 	return nil
 }
 
 func CardHandler() func(ctx context.Context,
 	cardAction *larkcard.CardAction) (interface{}, error) {
 	return func(ctx context.Context, cardAction *larkcard.CardAction) (interface{}, error) {
-		//handlerType := judgeCardType(cardAction)
 		return handlers.cardHandler(ctx, cardAction)
 	}
 }
@@ -50,7 +48,6 @@ func CardHandler() func(ctx context.Context,
 func judgeCardType(cardAction *larkcard.CardAction) HandlerType {
 	actionValue := cardAction.Action.Value
 	chatType := actionValue["chatType"]
-	//fmt.Printf("chatType: %v", chatType)
 	if chatType == "group" {
 		return GroupHandler
 	}

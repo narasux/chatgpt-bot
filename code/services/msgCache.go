@@ -21,6 +21,7 @@ func (u MsgService) IfProcessed(msgId string) bool {
 	_, found := u.cache.Get(msgId)
 	return found
 }
+
 func (u MsgService) TagProcessed(msgId string) {
 	u.cache.Set(msgId, true, time.Minute*30)
 }

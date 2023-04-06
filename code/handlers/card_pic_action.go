@@ -30,6 +30,7 @@ func NewPicModeChangeHandler(cardMsg CardMsg, m MessageHandler) CardHandlerFunc 
 		return nil, ErrNextHandler
 	}
 }
+
 func NewPicTextMoreHandler(cardMsg CardMsg, m MessageHandler) CardHandlerFunc {
 	return func(ctx context.Context, cardAction *larkcard.CardAction) (interface{}, error) {
 		if cardMsg.Kind == PicTextMoreKind {
@@ -44,28 +45,25 @@ func NewPicTextMoreHandler(cardMsg CardMsg, m MessageHandler) CardHandlerFunc {
 
 func CommonProcessPicResolution(msg CardMsg,
 	cardAction *larkcard.CardAction,
-	cache services.SessionServiceCacheInterface) {
+	cache services.SessionServiceCacheInterface,
+) {
 	option := cardAction.Action.Option
-	//fmt.Println(larkcore.Prettify(msg))
 	cache.SetPicResolution(msg.SessionId, services.Resolution(option))
-	//send text
-	replyMsg(context.Background(), "已更新图片分辨率为"+option,
-		&msg.MsgId)
+	// send text
+	replyMsg(context.Background(), "已更新图片分辨率为"+option, &msg.MsgId)
 }
 
 func (m MessageHandler) CommonProcessPicMore(msg CardMsg) {
 	resolution := m.sessionCache.GetPicResolution(msg.SessionId)
-	//fmt.Println("resolution: ", resolution)
-	//fmt.Println("msg: ", msg)
 	question := msg.Value.(string)
 	bs64, _ := m.gpt.GenerateOneImage(question, resolution)
 	replayImageCardByBase64(context.Background(), bs64, &msg.MsgId,
 		&msg.SessionId, question)
 }
 
-func CommonProcessPicModeChange(cardMsg CardMsg,
-	session services.SessionServiceCacheInterface) (
-	interface{}, error, bool) {
+func CommonProcessPicModeChange(
+	cardMsg CardMsg, session services.SessionServiceCacheInterface,
+) (interface{}, error, bool) {
 	if cardMsg.Value == "1" {
 
 		sessionId := cardMsg.SessionId
@@ -75,11 +73,10 @@ func CommonProcessPicModeChange(cardMsg CardMsg,
 		session.SetPicResolution(sessionId,
 			services.Resolution256)
 
-		newCard, _ :=
-			newSendCard(
-				withHeader("🖼️ 已进入图片创作模式", larkcard.TemplateBlue),
-				withPicResolutionBtn(&sessionId),
-				withNote("提醒：回复文本或图片，让AI生成相关的图片。"))
+		newCard, _ := newSendCard(
+			withHeader("🖼️ 已进入图片创作模式", larkcard.TemplateBlue),
+			withPicResolutionBtn(&sessionId),
+			withNote("提醒：回复文本或图片，让AI生成相关的图片。"))
 		return newCard, nil, true
 	}
 	if cardMsg.Value == "0" {

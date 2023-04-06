@@ -23,7 +23,6 @@ func NewLoadBalancer(keys []string) *LoadBalancer {
 	for _, key := range keys {
 		lb.apis = append(lb.apis, &API{Key: key})
 	}
-	//SetAvailabilityForAll true
 	lb.SetAvailabilityForAll(true)
 	return lb
 }
@@ -39,7 +38,7 @@ func (lb *LoadBalancer) GetAPI() *API {
 		}
 	}
 	if len(availableAPIs) == 0 {
-		//随机复活一个
+		// 随机复活一个
 		fmt.Printf("No available API, revive one randomly\n")
 		rand.Seed(time.Now().UnixNano())
 		index := rand.Intn(len(lb.apis))
@@ -56,14 +55,10 @@ func (lb *LoadBalancer) GetAPI() *API {
 		}
 	}
 	selectedAPI.Times++
-	//fmt.Printf("API Availability:\n")
-	//for _, api := range lb.apis {
-	//	fmt.Printf("%s: %v\n", api.Key, api.Available)
-	//	fmt.Printf("%s: %d\n", api.Key, api.Times)
-	//}
 
 	return selectedAPI
 }
+
 func (lb *LoadBalancer) SetAvailability(key string, available bool) {
 	lb.mu.Lock()
 	defer lb.mu.Unlock()

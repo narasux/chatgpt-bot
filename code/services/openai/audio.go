@@ -56,9 +56,7 @@ func (gpt ChatGPT) AudioToText(audio string) (string, error) {
 	audioToTextResponseBody := &AudioToTextResponseBody{}
 	err := gpt.sendRequestWithBodyType(gpt.ApiUrl+"/v1/audio/transcriptions",
 		"POST", formVoiceDataBody, requestBody, audioToTextResponseBody)
-	//fmt.Println(audioToTextResponseBody)
 	if err != nil {
-		//fmt.Println(err)
 		return "", err
 	}
 

@@ -58,7 +58,7 @@ func (e *Encoder) WriteHeader() error {
 		return err
 	}
 
-	if err := writeLe(e.Output, uint32(0)); err != nil { //Placeholder for data size
+	if err := writeLe(e.Output, uint32(0)); err != nil { // Placeholder for data size
 		return err
 	}
 	e.isHeaderWritten = true

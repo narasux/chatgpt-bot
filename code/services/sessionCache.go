@@ -9,10 +9,12 @@ import (
 	"github.com/narasux/chatgpt-bot/services/openai"
 )
 
-type SessionMode string
-type SessionService struct {
-	cache *cache.Cache
-}
+type (
+	SessionMode    string
+	SessionService struct {
+		cache *cache.Cache
+	}
+)
 type PicSetting struct {
 	resolution Resolution
 }
@@ -29,6 +31,7 @@ const (
 	Resolution512  Resolution = "512x512"
 	Resolution1024 Resolution = "1024x1024"
 )
+
 const (
 	ModePicCreate SessionMode = "pic_create"
 	ModePicVary   SessionMode = "pic_vary"
@@ -83,7 +86,7 @@ func (s *SessionService) SetMsg(sessionId string, msg []openai.Messages) {
 	maxLength := 4096
 	maxCacheTime := time.Hour * 12
 
-	//限制对话上下文长度
+	// 限制对话上下文长度
 	for getStrPoolTotalLength(msg) > maxLength {
 		msg = append(msg[:1], msg[2:]...)
 	}
@@ -99,12 +102,12 @@ func (s *SessionService) SetMsg(sessionId string, msg []openai.Messages) {
 	s.cache.Set(sessionId, sessionMeta, maxCacheTime)
 }
 
-func (s *SessionService) SetPicResolution(sessionId string,
-	resolution Resolution) {
+func (s *SessionService) SetPicResolution(
+	sessionId string, resolution Resolution,
+) {
 	maxCacheTime := time.Hour * 12
 
-	//if not in [Resolution256, Resolution512, Resolution1024] then set
-	//to Resolution256
+	// if not in [Resolution256, Resolution512, Resolution1024] then set to Resolution256
 	switch resolution {
 	case Resolution256, Resolution512, Resolution1024:
 	default:
@@ -129,7 +132,6 @@ func (s *SessionService) GetPicResolution(sessionId string) string {
 	}
 	sessionMeta := sessionContext.(*SessionMeta)
 	return string(sessionMeta.PicSetting.resolution)
-
 }
 
 func (s *SessionService) Clear(sessionId string) {

@@ -31,7 +31,6 @@ func (*PicAction) Execute(a *ActionInfo) bool {
 	}
 
 	mode := a.handler.sessionCache.GetMode(*a.info.sessionId)
-	//fmt.Println("mode: ", mode)
 
 	// 收到一张图片,且不在图片创作模式下, 提醒是否切换到图片创作模式
 	if a.info.msgType == "image" && mode != services.ModePicCreate {
@@ -40,17 +39,13 @@ func (*PicAction) Execute(a *ActionInfo) bool {
 	}
 
 	if a.info.msgType == "image" && mode == services.ModePicCreate {
-		//保存图片
+		// 保存图片
 		imageKey := a.info.imageKey
-		//fmt.Printf("fileKey: %s \n", imageKey)
 		msgId := a.info.msgId
-		//fmt.Println("msgId: ", *msgId)
 		req := larkim.NewGetMessageResourceReqBuilder().MessageId(
 			*msgId).FileKey(imageKey).Type("image").Build()
 		resp, err := initialization.GetLarkClient().Im.MessageResource.Get(context.Background(), req)
-		//fmt.Println(resp, err)
 		if err != nil {
-			//fmt.Println(err)
 			fmt.Sprintf("🤖️：图片下载失败，请稍后再试～\n 错误信息: %v", err)
 			return false
 		}
@@ -64,7 +59,7 @@ func (*PicAction) Execute(a *ActionInfo) bool {
 		openai.ConvertJpegToPNG(f)
 		openai.ConvertToRGBA(f, f)
 
-		//图片校验
+		// 图片校验
 		err = openai.VerifyPngs([]string{f})
 		if err != nil {
 			replyMsg(*a.ctx, fmt.Sprintf("🤖️：无法解析图片，请发送原图并尝试重新操作～"),

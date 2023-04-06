@@ -12,7 +12,10 @@ func TestCompletions(t *testing.T) {
 
 	msgs := []Messages{
 		{Role: "system", Content: "你是一个专业的翻译官，负责中英文翻译。"},
-		{Role: "user", Content: "翻译这段话: The assistant messages help store prior responses. They can also be written by a developer to help give examples of desired behavior."},
+		{
+			Role:    "user",
+			Content: "翻译这段话: The assistant messages help store prior responses. They can also be written by a developer to help give examples of desired behavior.",
+		},
 	}
 
 	gpt := NewChatGPT(*config)
@@ -51,7 +54,6 @@ func TestAudioToText(t *testing.T) {
 	if text == "" {
 		t.Errorf("TestAudioToText returned empty text")
 	}
-
 }
 
 func TestVariateOneImage(t *testing.T) {
@@ -59,11 +61,7 @@ func TestVariateOneImage(t *testing.T) {
 	gpt := NewChatGPT(*config)
 	image := "./test_file/img.png"
 	size := "256x256"
-	//compressionType, err := GetImageCompressionType(image)
-	//if err != nil {
-	//	return
-	//}
-	//fmt.Println("compressionType: ", compressionType)
+
 	ConvertToRGBA(image, image)
 	err := VerifyPngs([]string{image})
 	if err != nil {
@@ -75,7 +73,6 @@ func TestVariateOneImage(t *testing.T) {
 	if err != nil {
 		t.Errorf("TestVariateOneImage failed with error: %v", err)
 	}
-	//fmt.Printf("TestVariateOneImage returned imageBs64: %s \n", imageBs64)
 	if imageBs64 == "" {
 		t.Errorf("TestVariateOneImage returned empty imageURL")
 	}
@@ -91,7 +88,7 @@ func TestVariateOneImageWithJpg(t *testing.T) {
 		return
 	}
 	fmt.Println("compressionType: ", compressionType)
-	//ConvertJPGtoPNG(image)
+
 	ConvertToRGBA(image, image)
 	err = VerifyPngs([]string{image})
 	if err != nil {
